@@ -1,10 +1,16 @@
 package es.cic.curso.ejerc005;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,28 +18,43 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 //import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.MvcResult;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class SaludosControllerIntegrationTest {
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     private MockMvc mvc;
 
     @Test
     void testListar() throws Exception {
-        mvc.perform(get("/api/saludo")
+                mvc.perform(get("/api/saludo")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
     }
 
     @Test
     void testLeer() throws Exception {
-        mvc.perform(get("/api/saludo/{id}", 1)
+        long id = 1;
+        MvcResult mvcResult = mvc.perform(get("/api/saludo/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andReturn();
+
+        String body = mvcResult.getResponse().getContentAsString();
+        Saludo saludoResultado = objectMapper.readValue(body, Saludo.class);
+        
+        assertFalse(saludoResultado.isEscuchado());
     }
 
     @Test
@@ -42,6 +63,29 @@ class SaludosControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void testCrear() throws Exception {
+        //String mensaje = "{\"id\":1,\"dniCifNie\":\"777777X\",\"escuchado\":false,\"mensaje\":\"Hola\"}";
+        Saludo saludo = new Saludo(null, "dni", false, "Adios");
+        String mensaje = objectMapper.writeValueAsString(saludo);
+
+        MvcResult mvcResult = mvc.perform(post("/api/saludo")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mensaje))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().string("1"))
+        .andReturn();
+
+                //mvcResult.
+    }
+
+    @Test
+    @Disabled
+    void testActualizar() throws Exception{
+        fail("no implementado aun");
     }
 
 }

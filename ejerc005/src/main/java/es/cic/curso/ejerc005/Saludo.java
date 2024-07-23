@@ -19,6 +19,30 @@ public class Saludo {
         this.mensaje = mensaje;
     }
 
+
+    /*
+    public Saludo id(Long id){
+        this.id = id;
+        return this;
+    }
+
+    public Saludo dniCifNie(String dniCifNie){
+        this.dniCifNie = dniCifNie;
+        return this;
+    }
+
+    public Saludo escuchado(boolean escuchado){
+        this.escuchado = escuchado;
+        return this;
+    }
+
+    public Saludo mensaje(String mensaje){
+        this.mensaje = mensaje;
+        return this;
+    }
+    */
+
+
     public Long getId() {
         return id;
     }

@@ -1,22 +1,24 @@
 package com.example.prueba002.model;
 
 public class Videojuego {
-    private int id;
+    private Long id;
     private String name;
+    private boolean lanzado;
 
     public Videojuego() {
     }
 
-    public Videojuego(int id, String name) {
+    public Videojuego(Long id, String name, boolean lanzado) {
         this.id = id;
         this.name = name;
+        this.lanzado = lanzado;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -26,6 +28,14 @@ public class Videojuego {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isLanzado() {
+        return lanzado;
+    }
+
+    public void setLanzado(boolean lanzado) {
+        this.lanzado = lanzado;
     }
 }
 

@@ -1,5 +1,6 @@
 package es.cic.curso.ejerc005;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,34 @@ public class SaludosController {
 
     @PostMapping
     public long crear(@RequestBody Saludo saludo){
-        throw new UnsupportedOperationException("No implementado aun");
+        if(saludo.getId() != null){
+            
+        }
+        return 1l;
     }
 
     @GetMapping("/{id}")
     public Saludo leer(@PathVariable("id") long id){
-        throw new UnsupportedOperationException("No implementado aun");
+        Saludo saludo = new Saludo(1l, "777777X", false, "Hola");
+        return saludo;
     }
 
     @GetMapping
     public List<Saludo> listar(){
-        throw new UnsupportedOperationException("No implementado aun");
+        //cambiar esto pero ya
+        List<Saludo> respuesta = new ArrayList<>();
+        Saludo saludo = new Saludo(1l, "777777X", false, "Hola");
+        respuesta.add(saludo);
+
+        /*
+        Saludo saludo2 = new Saludo()
+            .id(1l)
+            .dniCifNie("777777X")
+            .escuchado(false)
+            .mensaje("Hola");
+        */
+
+        return respuesta;
     }
 
     @PutMapping

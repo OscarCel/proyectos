@@ -10,22 +10,22 @@ import java.util.List;
 public class VideojuegoService {
 
     private List<Videojuego> Videojuego = new ArrayList<>();
-    private int nextId = 1;
+    private long nextId = 1;
 
     public VideojuegoService() {
-        Videojuego.add(new Videojuego(nextId++, "The Legend of Zelda"));
-        Videojuego.add(new Videojuego(nextId++, "Super Mario Bros"));
+        Videojuego.add(new Videojuego(nextId++, "The Legend of Zelda", false));
+        Videojuego.add(new Videojuego(nextId++, "Super Mario Bros", true));
     }
 
     public List<Videojuego> list() {
         return new ArrayList<>(Videojuego);
     }
 
-    public Videojuego get(int id) {
+    public Videojuego get(long id) {
         return Videojuego.stream().filter(vg -> vg.getId() == id).findFirst().orElse(null);
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         Videojuego.removeIf(vg -> vg.getId() == id);
     }
 }
