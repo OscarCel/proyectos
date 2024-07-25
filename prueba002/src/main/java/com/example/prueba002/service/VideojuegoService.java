@@ -9,23 +9,31 @@ import java.util.List;
 @Service
 public class VideojuegoService {
 
-    private List<Videojuego> Videojuego = new ArrayList<>();
-    private long nextId = 1;
+    //creo una lista de videojuegos
+    private List<Videojuego> Videojuegos = new ArrayList<>();
+    private long Id = 1;
 
+    //creo los videojuegos y los añado a la lista
     public VideojuegoService() {
-        Videojuego.add(new Videojuego(nextId++, "The Legend of Zelda", false));
-        Videojuego.add(new Videojuego(nextId++, "Super Mario Bros", true));
+        Videojuegos.add(new Videojuego(Id++, "The Legend of Zelda", false));
+        Videojuegos.add(new Videojuego(Id++, "Super Mario Bros", true));
     }
 
+    //muestro una lista de los videojuegos
     public List<Videojuego> list() {
-        return new ArrayList<>(Videojuego);
+        return new ArrayList<>(Videojuegos);
     }
 
+    //muestra un videojuego identificado por id
     public Videojuego get(long id) {
-        return Videojuego.stream().filter(vg -> vg.getId() == id).findFirst().orElse(null);
+        return Videojuegos.stream()
+        .filter(juego -> juego.getId().equals(id))
+        .findFirst()
+        .orElse(null);
     }
 
+    //elimina un videojuego de la lista
     public void delete(long id) {
-        Videojuego.removeIf(vg -> vg.getId() == id);
+        Videojuegos.removeIf(juego -> juego.getId().equals(id));
     }
 }

@@ -3,14 +3,13 @@ package es.cic.curso.ejerc005;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -71,11 +70,11 @@ class SaludosControllerIntegrationTest {
         Saludo saludo = new Saludo(null, "dni", false, "Adios");
         String mensaje = objectMapper.writeValueAsString(saludo);
 
-        MvcResult mvcResult = mvc.perform(post("/api/saludo")
+        mvc.perform(post("/api/saludo")
             .contentType(MediaType.APPLICATION_JSON)
             .content(mensaje))
         .andDo(print())
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andExpect(content().string("1"))
         .andReturn();
 
@@ -83,9 +82,30 @@ class SaludosControllerIntegrationTest {
     }
 
     @Test
-    @Disabled
+    void testCrearDNIValidaton() throws Exception {
+        Saludo saludo = new Saludo(null, "dnidnidnidnidnidnidnidni", false, "Adios");
+        String mensaje = objectMapper.writeValueAsString(saludo);
+
+        mvc.perform(post("/api/saludo")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mensaje))
+        .andDo(print())
+        .andExpect(status().isCreated())
+        .andExpect(content().string("1"))
+        .andReturn();
+    }
+
+    @Test
     void testActualizar() throws Exception{
-        fail("no implementado aun");
+        Saludo saludo = new Saludo(3l, "dni", false, "Adios");
+        String mensaje = objectMapper.writeValueAsString(saludo);
+
+        mvc.perform(put("/api/saludo")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mensaje))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andReturn();
     }
 
 }

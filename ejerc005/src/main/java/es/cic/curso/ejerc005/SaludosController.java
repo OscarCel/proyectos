@@ -3,6 +3,7 @@ package es.cic.curso.ejerc005;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/saludo")
@@ -21,7 +25,8 @@ public class SaludosController {
 
 
     @PostMapping
-    public long crear(@RequestBody Saludo saludo){
+    @ResponseStatus(HttpStatus.CREATED)
+    public long crear(@RequestBody @Valid Saludo saludo){
         if(saludo.getId() != null){
             
         }
@@ -54,11 +59,11 @@ public class SaludosController {
 
     @PutMapping
     public void actualizar(@RequestBody Saludo saludo){
-        throw new UnsupportedOperationException("No implementado aun");
+        
     }
 
     @DeleteMapping("/{id}")
     public void borraro(@PathVariable("id") long id){
-        throw new UnsupportedOperationException("No implementado aun");
+        
     }
 }
