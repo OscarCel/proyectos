@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,17 +20,17 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/saludo")
 public class SaludosController {
-    //@Autowired
-    //private SaludosService saludosService;
+    @Autowired
+    private SaludosService saludosService;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public long crear(@RequestBody @Valid Saludo saludo){
         if(saludo.getId() != null){
-            
+            throw new RuntimeException("Me lo has tratado de colar");
         }
-        return 1l;
+        return saludosService.crear(saludo);
     }
 
     @GetMapping("/{id}")

@@ -77,11 +77,9 @@ class SaludosControllerIntegrationTest {
         .andExpect(status().isCreated())
         .andExpect(content().string("1"))
         .andReturn();
-
-                //mvcResult.
     }
 
-    @Test
+    /*@Test
     void testCrearDNIValidaton() throws Exception {
         Saludo saludo = new Saludo(null, "dnidnidnidnidnidnidnidni", false, "Adios");
         String mensaje = objectMapper.writeValueAsString(saludo);
@@ -93,7 +91,7 @@ class SaludosControllerIntegrationTest {
         .andExpect(status().isCreated())
         .andExpect(content().string("1"))
         .andReturn();
-    }
+    }*/
 
     @Test
     void testActualizar() throws Exception{

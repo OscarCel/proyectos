@@ -1,13 +1,26 @@
 package com.example.prueba002.service;
 
 import com.example.prueba002.model.Videojuego;
+import com.example.prueba002.repository.VideojuegoRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class VideojuegoService {
+
+    @Autowired
+    public VideojuegoRepository videojuegoRepository;
+
+    public long crear(Videojuego videojuego){     
+        videojuego = videojuegoRepository.save(videojuego);
+        return videojuego.getId();
+    }
 
     //creo una lista de videojuegos
     private List<Videojuego> Videojuegos = new ArrayList<>();
@@ -25,6 +38,7 @@ public class VideojuegoService {
     }
 
     //muestra un videojuego identificado por id
+    @Transactional(readOnly = true)
     public Videojuego get(long id) {
         return Videojuegos.stream()
         .filter(juego -> juego.getId().equals(id))

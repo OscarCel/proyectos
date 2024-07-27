@@ -6,6 +6,7 @@ import com.example.prueba002.service.VideojuegoService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,35 +19,37 @@ public class VideojuegoController {
     @Autowired
     private VideojuegoService videojuegoService;
 
-
     //crea un nuevo videojuego
     @PostMapping("/crear")
+    @ResponseStatus(HttpStatus.CREATED)
     public long crear(@RequestBody @Valid Videojuego videojuego){
-        if(videojuego.getId() != 0){
-            
+        if(videojuego.getId() != null){
+            throw new RuntimeException("Me lo has tratado de colar");
         }
-        return 3l;
+        return videojuegoService.crear(videojuego);
     }
 
     //muestra una lista con todos los videojuegos
     @GetMapping
     public List<Videojuego> list() {
-        //return videojuegoService.list();
-        List<Videojuego> videojuegos = new ArrayList<>();
+        return videojuegoService.list();
+
+       /*List<Videojuego> videojuegos = new ArrayList<>();
         Videojuego juego1 = new Videojuego(1l, "The legend of zelda", false);
         videojuegos.add(juego1);
         Videojuego juego2 = new Videojuego(2l, "Super Mario", true);
         videojuegos.add(juego2);
 
-        return videojuegos;
+        return videojuegos;*/
     }
 
     //muestra un videojuego identificado por id
     @GetMapping("/get/{id}")
     public Videojuego get(@PathVariable("id") long id) {
-        //return videojuegoService.get(id);
-        Videojuego videojuego = new Videojuego(1l, "The legend of zelda", false);
-        return videojuego;
+        return videojuegoService.get(id);
+
+        /*Videojuego videojuego = new Videojuego(1l, "The legend of zelda", false);
+        return videojuego;*/
     }
 
     //modifica el contenido de un videojuego
@@ -58,6 +61,6 @@ public class VideojuegoController {
     //elimina un videojuego
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable("id") int id) {
-        //videojuegoService.delete(id);
+        videojuegoService.delete(id);
     }
 }
