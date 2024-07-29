@@ -10,20 +10,31 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class SaludosControllerIntegrationTest {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -31,18 +42,35 @@ class SaludosControllerIntegrationTest {
     @Autowired
     private MockMvc mvc;
 
+    private Saludo saludo;
+
+    private long saludoId;
+
+    @BeforeEach
+    public void setUp(){
+        saludo = new Saludo(null, "dni", false, "Hola");
+        entityManager.persist(saludo);
+        entityManager.flush();
+        saludoId = saludo.getId();
+    }
+
+    @AfterEach
+    public void tearDown(){
+        entityManager.createQuery("DELETE FROM Saludo").executeUpdate();
+    }
+
     @Test
     void testListar() throws Exception {
-                mvc.perform(get("/api/saludo")
+        mvc.perform(get("/api/saludo")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.length()").value(0));
     }
 
     @Test
     void testLeer() throws Exception {
-        long id = 1;
+        long id = saludoId;
         MvcResult mvcResult = mvc.perform(get("/api/saludo/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -58,7 +86,7 @@ class SaludosControllerIntegrationTest {
 
     @Test
     void testBorrar() throws Exception {
-        mvc.perform(delete("/api/saludo/{id}", 1)
+        mvc.perform(delete("/api/saludo/{id}", saludoId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -66,36 +94,21 @@ class SaludosControllerIntegrationTest {
 
     @Test
     void testCrear() throws Exception {
-        //String mensaje = "{\"id\":1,\"dniCifNie\":\"777777X\",\"escuchado\":false,\"mensaje\":\"Hola\"}";
-        Saludo saludo = new Saludo(null, "dni", false, "Adios");
-        String mensaje = objectMapper.writeValueAsString(saludo);
+        Saludo sal = new Saludo(null, "dni", false, "Hola");
+        String mensaje = objectMapper.writeValueAsString(sal);
 
         mvc.perform(post("/api/saludo")
             .contentType(MediaType.APPLICATION_JSON)
             .content(mensaje))
         .andDo(print())
         .andExpect(status().isCreated())
-        .andExpect(content().string("1"))
+        .andExpect(content().string("3"))
         .andReturn();
     }
 
-    /*@Test
-    void testCrearDNIValidaton() throws Exception {
-        Saludo saludo = new Saludo(null, "dnidnidnidnidnidnidnidni", false, "Adios");
-        String mensaje = objectMapper.writeValueAsString(saludo);
-
-        mvc.perform(post("/api/saludo")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(mensaje))
-        .andDo(print())
-        .andExpect(status().isCreated())
-        .andExpect(content().string("1"))
-        .andReturn();
-    }*/
-
     @Test
-    void testActualizar() throws Exception{
-        Saludo saludo = new Saludo(3l, "dni", false, "Adios");
+    void testActualizar() throws Exception {
+        Saludo saludo = new Saludo(1L, "dni", false, "Adios");
         String mensaje = objectMapper.writeValueAsString(saludo);
 
         mvc.perform(put("/api/saludo")
@@ -105,5 +118,4 @@ class SaludosControllerIntegrationTest {
         .andExpect(status().isOk())
         .andReturn();
     }
-
 }

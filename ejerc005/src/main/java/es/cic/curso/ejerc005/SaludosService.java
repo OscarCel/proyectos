@@ -1,5 +1,9 @@
 package es.cic.curso.ejerc005;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +26,24 @@ public class SaludosService {
     }
 
     @Transactional(readOnly = true)
-    public Saludo leer(){
-        return new Saludo(1l, null, false, null);
+    public List<Saludo> listar(){
+        List<Saludo> result = new ArrayList<>();
+        result.forEach(result::add);
+        return (result);
+    }
+
+    @Transactional(readOnly = true)
+    public Saludo leer(long id){
+        Optional<Saludo> posibleResultado = saludoRepository.findById(id);
+
+        return posibleResultado.orElse(null);
+    }
+
+    public void actualizar(Saludo saludo){
+        saludoRepository.save(saludo);
+    }
+
+    public void borrar(long id){
+        saludoRepository.deleteById(id);
     }
 }

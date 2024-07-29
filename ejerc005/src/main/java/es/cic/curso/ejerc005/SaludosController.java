@@ -1,7 +1,8 @@
 package es.cic.curso.ejerc005;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.RuntimeErrorException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,35 +36,24 @@ public class SaludosController {
 
     @GetMapping("/{id}")
     public Saludo leer(@PathVariable("id") long id){
-        Saludo saludo = new Saludo(1l, "777777X", false, "Hola");
-        return saludo;
+        return saludosService.leer(id);
     }
 
     @GetMapping
     public List<Saludo> listar(){
-        //cambiar esto pero ya
-        List<Saludo> respuesta = new ArrayList<>();
-        Saludo saludo = new Saludo(1l, "777777X", false, "Hola");
-        respuesta.add(saludo);
-
-        /*
-        Saludo saludo2 = new Saludo()
-            .id(1l)
-            .dniCifNie("777777X")
-            .escuchado(false)
-            .mensaje("Hola");
-        */
-
-        return respuesta;
+        return saludosService.listar();
     }
 
     @PutMapping
     public void actualizar(@RequestBody Saludo saludo){
-        
+        if(saludo.getId() == null){
+            throw new RuntimeErrorException(null, "Me la trataste de colar");
+        }
+        saludosService.actualizar(saludo);
     }
 
     @DeleteMapping("/{id}")
     public void borraro(@PathVariable("id") long id){
-        
+        saludosService.borrar(id);
     }
 }
