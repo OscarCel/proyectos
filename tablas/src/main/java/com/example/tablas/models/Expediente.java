@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,11 +16,22 @@ public class Expediente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
 
     @OneToMany(mappedBy = "expediente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Documento> documentos;
+    private List<Documento> documentos = new ArrayList<>();
 
+    public Expediente() {
+    }
+
+    public Expediente(Long id, String nombre, List<Documento> documentos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.documentos = documentos;
+    }
+
+    //getter y setter
     public Long getId() {
         return id;
     }

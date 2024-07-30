@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.tablas.Repository.ExpedienteRepository;
+import com.example.tablas.models.Documento;
 import com.example.tablas.models.Expediente;
 
 import java.util.List;
@@ -36,14 +37,25 @@ public class ExpedienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Expediente> updateExpediente(@PathVariable Long id, @RequestBody Expediente expediente) {
+    public ResponseEntity<Expediente> updateExpediente(@PathVariable Long id, @RequestBody Expediente expedienteActualizado) {
         if (!expedienteRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        expediente.setId(id);
-        Expediente actualizado = expedienteRepository.save(expediente);
-        return ResponseEntity.ok(actualizado);
+        // Obtener el expediente existente
+        Expediente expedienteExistente = expedienteRepository.findById(id).orElseThrow();
+        // Actualizar el expediente existente
+        expedienteExistente.setNombre(expedienteActualizado.getNombre());
+        // Actualizar los documentos de manera segura
+        List<Documento> documentosActualizados = expedienteActualizado.getDocumentos();
+        expedienteExistente.getDocumentos().clear(); // Primero limpia la colección
+        if (documentosActualizados != null) {
+            expedienteExistente.getDocumentos().addAll(documentosActualizados); // Luego agrega los nuevos documentos
+        }
+        // Guardar el expediente actualizado
+        Expediente expedienteGuardado = expedienteRepository.save(expedienteExistente);
+        return ResponseEntity.ok(expedienteGuardado);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteExpediente(@PathVariable Long id) {

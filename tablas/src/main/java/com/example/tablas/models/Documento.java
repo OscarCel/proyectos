@@ -13,12 +13,23 @@ public class Documento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String titulo;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "expediente_id")
     private Expediente expediente;
 
+    public Documento() {
+    }
+
+    public Documento(Long id, String titulo, Expediente expediente) {
+        this.id = id;
+        this.titulo = titulo;
+        this.expediente = expediente;
+    }
+
+    //getter y setter
     public Long getId() {
         return id;
     }
