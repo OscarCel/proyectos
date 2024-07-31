@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.DTO.Repository.UserRepository;
-import com.example.DTO.model.User;
+import com.example.DTO.model.Users;
 import com.example.DTO.model.UserDTO;
 
 import java.util.Optional;
@@ -16,9 +16,9 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserDTO getUserById(Long id) {
-        Optional<User> userOpt = userRepository.findById(id);
+        Optional<Users> userOpt = userRepository.findById(id);
         if (userOpt.isPresent()) {
-            User user = userOpt.get();
+            Users user = userOpt.get();
             UserDTO userDTO = new UserDTO();
             userDTO.setId(user.getId());
             userDTO.setName(user.getName());
@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public UserDTO saveUser(UserDTO userDTO) {
-        User user = new User();
+        Users user = new Users();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user = userRepository.save(user);

@@ -68,8 +68,8 @@ public class UserControllerTest {
 
         // Llamar al endpoint y verificar resultados
         mockMvc.perform(post("/users")
-                .contentType("application/json")
-                .content(userJson))
+                    .contentType("application/json")
+                    .content(userJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(2))
                 .andExpect(jsonPath("$.name").value("Jane Doe"))
