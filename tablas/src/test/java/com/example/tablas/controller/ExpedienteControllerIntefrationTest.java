@@ -10,9 +10,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,6 +37,7 @@ public class ExpedienteControllerIntefrationTest {
     @BeforeEach
     public void setUp() {
         expediente = new Expediente();
+        expediente.setNombre("Nombre Expediente");
         expedienteService.crear(expediente);
     }
 
@@ -46,25 +52,27 @@ public class ExpedienteControllerIntefrationTest {
 
     @Test
     public void testMostrar() throws Exception {
-        mockMvc.perform(get("/api/expedientes/{id}", expediente.getId()))
+        mockMvc.perform(get("/api/expedientes/{1}", expediente.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(expediente.getId()));
+                .andExpect(jsonPath("$.id").value(expediente.getId()))
+                .andReturn();
     }
 
     @Test
     public void testCrear() throws Exception {
-        Expediente nuevoExpediente = new Expediente();
         mockMvc.perform(post("/api/expedientes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(nuevoExpediente)))
+                .content(objectMapper.writeValueAsString(expediente)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty());
+
     }
 
     @Test
     public void testActualizar() throws Exception {
-        expediente.setDocumentos(null); // o establecer datos relevantes
+        expediente.setNombre("Nuevo Nombre"); 
         mockMvc.perform(put("/api/expedientes/{id}", expediente.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(expediente)))

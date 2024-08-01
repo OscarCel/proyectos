@@ -23,7 +23,7 @@ public class ExpedienteService {
     
     @Transactional(readOnly = true)
     public Expediente mostrar(long id){
-        return expedienteRepository.findByID(id);
+        return expedienteRepository.findById(id).orElseThrow(() -> new RuntimeException("No lo encontre"));
     }
 
     public void crear(Expediente expediente){

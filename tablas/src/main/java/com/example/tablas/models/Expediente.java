@@ -20,7 +20,7 @@ public class Expediente {
     private String nombre;
 
     @OneToMany(mappedBy = "expediente", 
-    cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+    cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private List<Documento> documentos = new ArrayList<>();
 
     //getter y setter

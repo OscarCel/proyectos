@@ -1,5 +1,7 @@
 package com.example.tablas.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,7 @@ public class Documento {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "expediente_id")
+    @JsonIgnore
     private Expediente expediente;
 
     //getter y setter

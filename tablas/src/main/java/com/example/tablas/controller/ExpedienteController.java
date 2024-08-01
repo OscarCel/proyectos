@@ -22,12 +22,8 @@ public class ExpedienteController {
     }
 
     @GetMapping("/{id}")
-    public Expediente mostrar(@PathVariable long id) {
-        Expediente expediente = expedienteService.mostrar(id);
-        if (expediente == null) {
-            throw new RuntimeException("Expediente no encontrado con ID: " + id);
-        }
-        return expediente;
+    public Expediente mostrar(@PathVariable("id") long id) {
+        return expedienteService.mostrar(id);
     }
 
     @PostMapping
