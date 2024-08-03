@@ -2,7 +2,9 @@ package com.example.tablas.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +36,7 @@ import jakarta.persistence.PersistenceContext;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ExpedienteServiceIntegrationTest {
+class ExpedienteServiceIntegrationTest {
 
     @Autowired
     private ExpedienteRepository expedienteRepository;
@@ -52,11 +54,13 @@ public class ExpedienteServiceIntegrationTest {
     ObjectMapper objectMapper;
 
     private Expediente expediente;
+    private Expediente expediente2;
 
     @BeforeEach
     public void setUp() {
 
         expediente = new Expediente();
+        expediente.setNombre("Hola");
         expediente = expedienteRepository.save(expediente);
 
         Documento documento = new Documento();
@@ -65,6 +69,11 @@ public class ExpedienteServiceIntegrationTest {
 
         expediente.getDocumentos().add(documento);
         expedienteRepository.save(expediente);
+
+        expediente2 = new Expediente();
+        expediente2.setNombre("Nombre Expediente");
+        expedienteRepository.save(expediente2);
+
         expedienteRepository.flush();
     }
 
@@ -95,10 +104,13 @@ public class ExpedienteServiceIntegrationTest {
     }
 
     @Test
-    void testCrear() {
-        Expediente nuevoExpediente = new Expediente();
-        expedienteService.crear(nuevoExpediente);
-        
+    public void testCrear() throws Exception {
+        mockMvc.perform(post("/api/expedientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(expediente2)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty());
+
     }
 
     @Test
@@ -120,9 +132,8 @@ public class ExpedienteServiceIntegrationTest {
     }
 
     @Test
-    @Disabled
-    void testBorrar() {
-        expedienteService.borrar(expediente);
-        
+    public void testBorrar() throws Exception {
+        mockMvc.perform(delete("/api/expedientes/{id}", expediente.getId()))
+                .andExpect(status().isNoContent());
     }
 }

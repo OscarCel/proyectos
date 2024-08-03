@@ -1,36 +1,33 @@
-package com.example.tablas.models;
+package com.example.onetoone.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-public class Expediente {
-    
+public class Persona {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @Size(max = 10)
     private String nombre;
 
-    @OneToMany(mappedBy = "expediente", 
+    @OneToOne(mappedBy = "persona",
     cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Documento> documentos = new ArrayList<>();
+    private Cuenta cuenta;
 
-    //getter y setter
-    public Long getId() {
+    //getter y setters
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -42,12 +39,13 @@ public class Expediente {
         this.nombre = nombre;
     }
 
-    public List<Documento> getDocumentos() {
-        return documentos;
+    public Cuenta getCuenta() {
+        return cuenta;
     }
 
-    public void setDocumentos(List<Documento> documentos) {
-        this.documentos = documentos;
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
+
     
 }
