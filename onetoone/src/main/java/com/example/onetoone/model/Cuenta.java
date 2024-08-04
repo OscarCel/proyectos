@@ -1,6 +1,6 @@
 package com.example.onetoone.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +20,7 @@ public class Cuenta {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "persona_id")
-     @JsonBackReference // Evita la recursión infinita
+    @JsonIgnore // Evita la recursión infinita
     private Persona persona;
 
     //getters y setters
