@@ -47,7 +47,7 @@ class PersonaControllerIntegrationTest {
     @BeforeEach
     public void setUp(){
         persona = new Persona();
-        persona.setNombre("Nombre");
+        persona.setNombre("Nombre1");
         persona = personaRepository.save(persona);
 
         Cuenta cuenta = new Cuenta();
