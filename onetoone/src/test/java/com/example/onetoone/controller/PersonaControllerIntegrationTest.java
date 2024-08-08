@@ -47,7 +47,7 @@ class PersonaControllerIntegrationTest {
     @BeforeEach
     public void setUp(){
         persona = new Persona();
-        persona.setNombre("Oscar");
+        persona.setNombre("Nombre");
         persona = personaRepository.save(persona);
 
         Cuenta cuenta = new Cuenta();
@@ -62,7 +62,7 @@ class PersonaControllerIntegrationTest {
     @Test
     void testCrear() throws Exception {
         Persona per = new Persona();
-        per.setNombre("Oscar2");
+        per.setNombre("Nombre2");
         Cuenta cu = new Cuenta();
         cu.setNombre("cu");
         cu.setPersona(per);
@@ -107,7 +107,7 @@ class PersonaControllerIntegrationTest {
     void testActualizar() throws Exception {
         Persona per = new Persona();
         per.setId(1l);
-        per.setNombre("Oscar3");
+        per.setNombre("Nombre3");
         Cuenta cu = new Cuenta();
         cu.setNombre("cu");
         cu.setPersona(per);
